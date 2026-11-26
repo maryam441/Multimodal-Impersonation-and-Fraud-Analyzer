@@ -8,6 +8,8 @@ from backend.app.api.v1.health import router as health_router
 from backend.app.api.v1.cases import router as cases_router
 from backend.app.api.v1.analysis import router as analysis_router
 from backend.app.api.v1.assistant import router as assistant_router
+from backend.app.api.v1.ambient import router as ambient_router
+from backend.app.api.v1.incidents import router as incidents_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -40,6 +42,8 @@ app.include_router(health_router, prefix=settings.API_V1_PREFIX)
 app.include_router(cases_router, prefix=settings.API_V1_PREFIX)
 app.include_router(analysis_router, prefix=settings.API_V1_PREFIX)
 app.include_router(assistant_router, prefix=settings.API_V1_PREFIX)
+app.include_router(ambient_router, prefix=settings.API_V1_PREFIX)
+app.include_router(incidents_router, prefix=settings.API_V1_PREFIX)
 
 @app.get("/")
 async def root():

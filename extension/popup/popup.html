@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sentinel Ambient Shield</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="popup-header">
+      <div class="header-brand">
+        <div class="brand-dot"></div>
+        <div>
+          <h1 class="brand-title">SENTINEL AMBIENT SHIELD</h1>
+          <span class="brand-subtitle">Real-Time Fraud & Impersonation Guardian</span>
+        </div>
+      </div>
+      <div class="status-pill active" id="shieldStatusPill">ACTIVE</div>
+    </header>
+
+    <!-- Metrics Bar -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <span class="metric-label">SCANNED</span>
+        <span class="metric-val" id="metricScanned">0</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">THREATS</span>
+        <span class="metric-val rose" id="metricThreats">0</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">FIA REPORTS</span>
+        <span class="metric-val emerald" id="metricReports">0</span>
+      </div>
+    </div>
+
+    <!-- Quick Scan Tool -->
+    <div class="section-box">
+      <div class="section-title">QUICK AMBIENT SCANNER</div>
+      <div class="quick-input-group">
+        <textarea id="quickScanInput" placeholder="Paste suspicious SMS, Roman Urdu text, URL, or phone number..."></textarea>
+        <button id="quickScanBtn" class="primary-btn">Analyze Threat</button>
+      </div>
+      <div id="quickScanResult" class="scan-result-card hidden"></div>
+    </div>
+
+    <!-- Live Intercepts / Recent Threats -->
+    <div class="section-box">
+      <div class="section-title">RECENT DETECTIONS</div>
+      <div id="recentThreatsList" class="threats-list">
+        <div class="empty-state">No active threats detected yet. Ambient shield is actively guarding WhatsApp & Email.</div>
+      </div>
+    </div>
+
+    <!-- Footer Controls -->
+    <footer class="popup-footer">
+      <div class="toggle-row">
+        <span>Active Shield Protection</span>
+        <label class="switch">
+          <input type="checkbox" id="protectionToggle" checked>
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <button id="openDashboardBtn" class="secondary-btn">Open Forensic Command Center</button>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

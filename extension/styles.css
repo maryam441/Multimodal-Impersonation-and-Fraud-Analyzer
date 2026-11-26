@@ -1,0 +1,165 @@
+/* Sentinel Ambient Shield - Injected Overlay & Badge Styles */
+
+.sentinel-threat-badge {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  margin: 6px 0 !important;
+  padding: 6px 12px !important;
+  background: linear-gradient(135deg, rgba(30, 10, 20, 0.95), rgba(76, 5, 25, 0.9)) !important;
+  border: 1px solid #f43f5e !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 14px rgba(244, 63, 94, 0.25) !important;
+  color: #fff !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  font-size: 11px !important;
+  line-height: 1.4 !important;
+  z-index: 9999 !important;
+  backdrop-filter: blur(8px) !important;
+  animation: sentinelPulse 2s infinite ease-in-out !important;
+}
+
+@keyframes sentinelPulse {
+  0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(244, 63, 94, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
+}
+
+.sentinel-badge-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-weight: 700 !important;
+  color: #fca5a5 !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+}
+
+.sentinel-threat-tags {
+  font-size: 10px !important;
+  color: #fecdd3 !important;
+  margin-top: 2px !important;
+}
+
+.sentinel-report-btn {
+  background: #e11d48 !important;
+  color: #ffffff !important;
+  border: 1px solid #fda4af !important;
+  padding: 4px 10px !important;
+  border-radius: 6px !important;
+  font-size: 10px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  text-transform: uppercase !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4) !important;
+}
+
+.sentinel-report-btn:hover {
+  background: #be123c !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Gmail Top Alert Banner */
+.sentinel-gmail-banner {
+  background: linear-gradient(90deg, #1e1022, #3b0717) !important;
+  border-left: 4px solid #f43f5e !important;
+  padding: 12px 18px !important;
+  margin-bottom: 12px !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  color: #f1f5f9 !important;
+  font-family: inherit !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
+}
+
+/* Human-in-the-Loop Confirmation Modal */
+.sentinel-modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(2, 6, 23, 0.85) !important;
+  backdrop-filter: blur(8px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 100000 !important;
+}
+
+.sentinel-modal-card {
+  width: 520px !important;
+  max-width: 90vw !important;
+  background: #0f172a !important;
+  border: 1px solid #334155 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75), 0 0 20px rgba(244, 63, 94, 0.2) !important;
+  padding: 24px !important;
+  color: #e2e8f0 !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+.sentinel-modal-title {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  color: #f43f5e !important;
+  margin-bottom: 12px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.sentinel-modal-body {
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+  color: #94a3b8 !important;
+  margin-bottom: 20px !important;
+}
+
+.sentinel-modal-evidence-box {
+  background: #020617 !important;
+  border: 1px solid #1e293b !important;
+  border-radius: 8px !important;
+  padding: 12px !important;
+  margin: 12px 0 !important;
+  font-family: monospace !important;
+  font-size: 11px !important;
+  color: #38bdf8 !important;
+  max-height: 120px !important;
+  overflow-y: auto !important;
+}
+
+.sentinel-modal-actions {
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 12px !important;
+}
+
+.sentinel-btn-secondary {
+  background: #1e293b !important;
+  color: #cbd5e1 !important;
+  border: 1px solid #334155 !important;
+  padding: 8px 16px !important;
+  border-radius: 8px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
+
+.sentinel-btn-primary {
+  background: linear-gradient(135deg, #e11d48, #be123c) !important;
+  color: #ffffff !important;
+  border: 1px solid #f43f5e !important;
+  padding: 8px 18px !important;
+  border-radius: 8px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.4) !important;
+}

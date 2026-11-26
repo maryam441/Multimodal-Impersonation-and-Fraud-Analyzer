@@ -214,3 +214,66 @@ export async function dispatchFiaReport(caseId: string, userConfirmed: boolean, 
   }
   return res.json();
 }
+
+export interface AmbientScanHistoryItem {
+  id: string;
+  case_id: string;
+  source: string;
+  sender_info: string;
+  preview_snippet: string;
+  risk_score: number;
+  is_threat: boolean;
+  threat_tags: string[];
+  target_phone?: string;
+  target_url?: string;
+  created_at: string;
+}
+
+export interface FiaIncidentItem {
+  id: string;
+  reference_no: string;
+  case_id: string;
+  accused_identifier: string;
+  platform_source: string;
+  risk_score: number;
+  risk_category: string;
+  statutory_sections: string[];
+  sha256_digest: string;
+  status: string;
+  created_at: string;
+}
+
+export async function getAmbientScanHistory(): Promise<AmbientScanHistoryItem[]> {
+  const res = await fetch(`${API_BASE}/ambient/history`);
+  if (!res.ok) return [];
+  return res.json();
+}
+
+export async function listFiaIncidents(): Promise<FiaIncidentItem[]> {
+  const res = await fetch(`${API_BASE}/incidents`);
+  if (!res.ok) return [];
+  return res.json();
+}
+
+export async function directReportFia(payload: {
+  case_id: string;
+  user_confirmed: boolean;
+  operator_notes?: string;
+  source: string;
+  accused_identifier?: string;
+}): Promise<any> {
+  const res = await fetch(`${API_BASE}/incidents/direct-report`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "Failed to submit FIA report");
+  }
+  return res.json();
+}
+
+export function getFiaDownloadUrl(referenceNo: string): string {
+  return `${API_BASE}/incidents/${referenceNo}/download`;
+}

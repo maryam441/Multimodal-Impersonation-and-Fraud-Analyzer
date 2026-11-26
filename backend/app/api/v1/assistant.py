@@ -15,10 +15,12 @@ from backend.app.db.session import get_db
 from backend.app.db.models import Case, ModalityResult, AuditEvent
 from backend.app.services.rag_service import GroundedSafetyAssistant
 from backend.app.services.fusion_service import FusionEngine, ModalityScoreInput
+from backend.app.services.fia_reporting_service import FIAReportingService
 
 router = APIRouter()
 assistant_service = GroundedSafetyAssistant()
 fusion_engine = FusionEngine()
+fia_reporting_service = FIAReportingService()
 
 
 class AssistantQueryRequest(BaseModel):
@@ -140,30 +142,11 @@ async def report_to_fia(case_id: str, payload: HumanGateActionRequest, db: Async
             detail="Human confirmation required: Action halted by Human-in-the-Loop safety gate."
         )
 
-    stmt = select(ModalityResult).where(ModalityResult.case_id == case_id)
-    results = (await db.execute(stmt)).scalars().all()
-
-    incident_summary = {
-        "agency": "Federal Investigation Agency (FIA) - Cyber Crime Wing",
-        "legal_basis": "PECA 2016 Sections 13 & 14",
-        "case_id": case_id,
-        "confirmed_by_human": True,
-        "operator_notes": payload.investigator_notes or "Investigator confirmed report dispatch.",
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-        "complaint_payload": {
-            "evidence_count": len(results),
-            "modalities": [r.modality for r in results],
-            "action_status": "DISPATCH_READY"
-        }
-    }
-
-    # Record audit trail
-    audit = AuditEvent(
+    fia_res = await fia_reporting_service.register_fia_complaint(
         case_id=case_id,
-        action="FIA_DISPATCH_CONFIRMED",
-        details={"notes": payload.investigator_notes, "actor": "HUMAN_OPERATOR"}
+        db=db,
+        operator_notes=payload.investigator_notes,
+        complainant_source="investigator_dossier"
     )
-    db.add(audit)
-    await db.commit()
 
-    return incident_summary
+    return fia_res

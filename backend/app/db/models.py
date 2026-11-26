@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime, timezone
-from sqlalchemy import String, DateTime, Float, Integer, JSON, ForeignKey, Enum as SQLEnum
+from sqlalchemy import String, DateTime, Float, Integer, JSON, ForeignKey, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from backend.app.db.base import Base
 
@@ -17,6 +17,8 @@ class Case(Base):
     modality_results = relationship("ModalityResult", back_populates="case", cascade="all, delete-orphan")
     fusion_assessment = relationship("FusionAssessment", back_populates="case", uselist=False, cascade="all, delete-orphan")
     audit_events = relationship("AuditEvent", back_populates="case", cascade="all, delete-orphan")
+    fia_reports = relationship("FIAIncidentReport", back_populates="case", cascade="all, delete-orphan")
+    ambient_scans = relationship("AmbientScanLog", back_populates="case", cascade="all, delete-orphan")
 
 class EvidenceItem(Base):
     __tablename__ = "evidence_items"
@@ -76,3 +78,40 @@ class AuditEvent(Base):
     timestamp: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     case = relationship("Case", back_populates="audit_events")
+
+class FIAIncidentReport(Base):
+    __tablename__ = "fia_incident_reports"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    case_id: Mapped[str] = mapped_column(String(36), ForeignKey("cases.id", ondelete="CASCADE"), nullable=False)
+    reference_no: Mapped[str] = mapped_column(String(64), unique=True, index=True, nullable=False)
+    accused_identifier: Mapped[str] = mapped_column(String(255), nullable=True)
+    platform_source: Mapped[str] = mapped_column(String(64), default="web")
+    risk_score: Mapped[float] = mapped_column(Float, default=0.0)
+    risk_category: Mapped[str] = mapped_column(String(32), default="high")
+    statutory_sections: Mapped[list] = mapped_column(JSON, default=list)
+    evidence_summary: Mapped[dict] = mapped_column(JSON, default=dict)
+    complaint_text: Mapped[str] = mapped_column(String(8192), default="")
+    sha256_digest: Mapped[str] = mapped_column(String(64), nullable=True)
+    operator_notes: Mapped[str] = mapped_column(String(1024), default="")
+    status: Mapped[str] = mapped_column(String(32), default="REGISTERED")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+    case = relationship("Case", back_populates="fia_reports")
+
+class AmbientScanLog(Base):
+    __tablename__ = "ambient_scan_logs"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    case_id: Mapped[str] = mapped_column(String(36), ForeignKey("cases.id", ondelete="CASCADE"), nullable=True)
+    source: Mapped[str] = mapped_column(String(64), default="ambient")
+    sender_info: Mapped[str] = mapped_column(String(255), nullable=True)
+    preview_snippet: Mapped[str] = mapped_column(String(512), default="")
+    risk_score: Mapped[float] = mapped_column(Float, default=0.0)
+    is_threat: Mapped[bool] = mapped_column(default=False)
+    threat_tags: Mapped[list] = mapped_column(JSON, default=list)
+    target_phone: Mapped[str] = mapped_column(String(64), nullable=True)
+    target_url: Mapped[str] = mapped_column(String(255), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+    case = relationship("Case", back_populates="ambient_scans")
