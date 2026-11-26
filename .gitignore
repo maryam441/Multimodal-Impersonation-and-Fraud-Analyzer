@@ -1,0 +1,118 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# C extensions
+*.obj
+*.o
+*.pyd
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+.venv/
+myenv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Datasets and Large Data Files (Strict Rule: Zero datasets/audio committed)
+datasets/
+phone_dataset/
+*.csv
+*.xlsx
+*.parquet
+*.tar.gz
+*.zip
+*.7z
+# Allow small synthetic test fixtures under tests/fixtures
+!tests/fixtures/*.csv
+!tests/fixtures/*.json
+
+# Audio and Media Files
+*.wav
+*.mp3
+*.ogg
+*.flac
+*.m4a
+*.aac
+*.wma
+
+# Trained Model Binaries and Scalers (Strict Rule: Zero binary weights committed)
+trained_models/
+ml/artifacts/
+*.pkl
+*.joblib
+*.pth
+*.pt
+*.onnx
+*.h5
+*.bin
+*.model
+
+# Node & Next.js
+node_modules/
+.next/
+out/
+.pnp
+.pnp.js
+*.tsbuildinfo
+next-env.d.ts
+
+# Environment variables & secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+credentials.json
+token.json
+
+# Logs & Databases
+*.log
+*.sqlite
+*.sqlite3
+*.db
+
+# Testing & Coverage
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+coverage.xml
+.nyc_output/
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Large research PDFs (preserve locally, excluded from git)
+*.pdf
