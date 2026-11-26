@@ -1,0 +1,58 @@
+[
+  {
+    "id": "SBP-BPRD-CIRCULAR-02-2023",
+    "authority": "State Bank of Pakistan (SBP)",
+    "title": "Mitigation of Unauthorized Electronic Funds Transfers & Social Engineering Scams",
+    "category": "banking_fraud",
+    "matched_signals": ["OTP_SOLICITATION", "ACCOUNT_BLOCK_THREAT", "FINANCIAL_INSTITUTION_IMPERSONATION", "FUNDS_TRANSFER_DEMAND"],
+    "summary": "Commercial banks and MFBs will NEVER request an OTP, PIN, CVV, or mobile app login password over phone or SMS.",
+    "remedial_actions": [
+      "Immediately call your bank's official 24/7 helpline (from the back of your card) to temporarily block internet banking and debit cards.",
+      "File a formal dispute with your bank within 24 hours to initiate fund freeze protocols under SBP Consumer Protection Framework.",
+      "Never share 6-digit OTPs under pretext of account activation or fraudulent transaction reversal."
+    ],
+    "citation": "State Bank of Pakistan BPRD Circular No. 02 of 2023"
+  },
+  {
+    "id": "PTA-ADVISORY-SMS-SPOOF",
+    "authority": "Pakistan Telecommunication Authority (PTA)",
+    "title": "Reporting of Fraudulent, Obscene, and Scam SMS / Calls (Short Code 8866)",
+    "category": "telecom_fraud",
+    "matched_signals": ["REPORTED_FRAUD_RECORD", "LOTTERY_PRIZE_FRAUD", "GOVERNMENT_OR_TV_SCHEME_FRAUD", "ARTIFICIAL_URGENCY"],
+    "summary": "Fraudulent messages claiming cash prizes (Jeeto Pakistan, BISP, Ehsaas) or lottery winnings are criminal schemes under PECA 2016.",
+    "remedial_actions": [
+      "Forward the fraudulent sender number and SMS text to PTA shortcode 8866.",
+      "Block the sender number on your mobile handset immediately.",
+      "Report persistent extortion to PTA Toll-Free Consumer Protection Helpline 0800-55055."
+    ],
+    "citation": "PTA Public Notice on Fraudulent Communications & Consumer Protection Act 1996"
+  },
+  {
+    "id": "FIA-CYBERCRIME-PECA-SEC13",
+    "authority": "Federal Investigation Agency (FIA) - Cyber Crime Wing",
+    "title": "Electronic Forgery, Impersonation, and Identity Theft (Section 13 & 14 PECA 2016)",
+    "category": "law_enforcement",
+    "matched_signals": ["AUTHORITY_IMPERSONATION", "LEGAL_THREAT_EXTORTION", "VOICE_MANIPULATION", "DEEPFAKE_VOICE"],
+    "summary": "Impersonating law enforcement, judiciary, or military personnel to extort funds carries up to 3 years imprisonment under Prevention of Electronic Crimes Act.",
+    "remedial_actions": [
+      "Law enforcement agencies do NOT conduct arrests or settle criminal cases via Easypaisa, JazzCash, or wire transfer.",
+      "Do not transfer any 'bail' or 'clearance' money. Hang up immediately.",
+      "File an online complaint with FIA Cyber Crime Reporting Center at https://complaint.fia.gov.pk or visit nearest zonal office."
+    ],
+    "citation": "Prevention of Electronic Crimes Act (PECA) 2016, Sections 13, 14 & 16"
+  },
+  {
+    "id": "PTA-CERT-PHISHING-URL",
+    "authority": "National CERT / PTA Advisory",
+    "title": "Credential Harvesting Phishing Domains & Typosquatting Defense",
+    "category": "web_security",
+    "matched_signals": ["DECEPTIVE_BRAND_TOKENS", "HIGH_RISK_TLD", "IP_LITERAL_HOST", "CREDENTIAL_OBFUSCATION_AT_SYMBOL"],
+    "summary": "Deceptive websites imitating Pakistani banks or mobile wallets often use non-standard TLDs (.xyz, .top) or IP addresses.",
+    "remedial_actions": [
+      "Never enter your CNIC, banking username, password, or ATM PIN on any link received via SMS or WhatsApp.",
+      "Verify the exact domain URL. Pakistani banking portals only operate under official .pk or verified corporate top-level domains.",
+      "Report phishing URLs to report.phishing@pta.gov.pk for national firewall DNS blocking."
+    ],
+    "citation": "National CERT Advisory (NCERT-ADV-2023-08) on Phishing and Smishing Mitigation"
+  }
+]
