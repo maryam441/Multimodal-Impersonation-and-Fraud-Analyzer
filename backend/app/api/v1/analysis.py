@@ -8,12 +8,17 @@ from sqlalchemy import select
 from backend.app.core.config import settings
 from backend.app.db.session import get_db
 from backend.app.db.models import Case, EvidenceItem, ModalityResult, FusionAssessment
-from backend.app.schemas.inputs import PhoneAnalysisRequest, MessageAnalysisRequest, ConversationAnalysisRequest, URLAnalysisRequest
+from backend.app.schemas.inputs import (
+    PhoneAnalysisRequest, MessageAnalysisRequest, ConversationAnalysisRequest, URLAnalysisRequest, EmailAnalysisRequest
+)
 from backend.app.schemas.modality import ModalityResultResponse
 from backend.app.services.job_manager import job_telemetry
 from backend.app.services.default_analyzers import (
     phone_analyzer, message_analyzer, url_analyzer, conversation_analyzer, voice_analyzer
 )
+from backend.app.services.email_service import EmailServiceAnalyzer
+
+email_analyzer = EmailServiceAnalyzer()
 
 router = APIRouter()
 
@@ -116,6 +121,16 @@ async def analyze_voice(case_id: str, file: UploadFile = File(None), preset_file
     result = await voice_analyzer.execute_safe(case_id, None)
     await save_modality_result(case_id, result, db)
     job_telemetry.update_stage(case_id, "voice", "completed", 100)
+    return result
+
+@router.post("/cases/{case_id}/email", response_model=ModalityResultResponse, tags=["Modality Analysis"])
+async def analyze_email(case_id: str, payload: EmailAnalysisRequest, db: AsyncSession = Depends(get_db)):
+    await get_valid_case(case_id, db)
+    job_telemetry.update_stage(case_id, "email", "preprocessing", 30)
+    job_telemetry.update_stage(case_id, "email", "inference", 80)
+    result = await email_analyzer.execute_safe(case_id, payload)
+    await save_modality_result(case_id, result, db)
+    job_telemetry.update_stage(case_id, "email", "completed", 100)
     return result
 
 @router.get("/cases/{case_id}/status", tags=["Case Lifecycle"])

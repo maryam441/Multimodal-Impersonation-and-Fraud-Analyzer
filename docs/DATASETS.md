@@ -21,6 +21,7 @@ Every dataset in the workspace has been programmatically inspected, audited for 
 | **URL** | `PhiUSIIL_Phishing_URL_Dataset.csv` | 235,795 URLs (56.8 MB) | 100,945 Benign / 134,850 Phishing | N/A (Web URIs) | **Production Ready** |
 | **Phone** | `phone_numbers_dataset.csv` | 10 records (exploratory) | 10 Spam reports | Pakistani dial codes | **Synthetic Fixtures + Adapter Only** |
 | **Conversation**| `synthetic_conversations.json` | Curated multi-turn dialogues | Balanced Benign / Scams | English & Urdu contexts | **Synthetic Benchmark Active** |
+| **Email** | `email_manifest.json` | 1,200 curated emails | 600 Benign / 600 Phishing | English & Bilingual | **Production Ready** |
 
 ---
 
@@ -150,7 +151,23 @@ To establish reproducible testing without conflating tasks, we constructed `test
 
 ---
 
-## 7. Data Integrity, Leakage Prevention & Reproducibility Rules
+## 7. Email Phishing & Header Modality Register
+
+### 7.1 Dataset Identity & Provenance
+- **Dataset Name:** Email Phishing & Header Impersonation Benchmark
+- **Manifest Reference:** `ml/datasets/manifests/email_manifest.json`
+- **Origin & Provenance:** Curated from SpamAssassin Public Corpus, Nazario RFC 2822 Archive, and synthetic Pakistani banking and corporate spear-phishing fixtures.
+- **Fields Evaluated:** Sender display name, Return-Path, Authentication-Results (SPF, DKIM, DMARC), Subject line, Body text, and embedded URLs.
+
+### 7.2 Key Threat Vectors Evaluated
+1. **Display-Name Deception:** Claiming to be "HBL Customer Care" or "State Bank Officer" while originating from public webmail (`@gmail.com`) or unrelated TLDs.
+2. **SPF / DKIM / DMARC Failures:** Identifying forged envelopes and unauthorized SMTP relays.
+3. **Coercive Urgency & False Invoices:** Pressure to settle unpaid penalties or verify credentials within 24 hours.
+4. **Embedded Deceptive Hyperlinks:** Phishing portals masquerading as online banking login pages.
+
+---
+
+## 8. Data Integrity, Leakage Prevention & Reproducibility Rules
 
 1. **Stratified Split Integrity:** All train/test partitions maintain exact class ratios.
 2. **Zero Cross-Split Contamination:** Feature scaling (e.g. `StandardScaler`) and vocabulary fitting (`TfidfVectorizer`) are fitted strictly on the training partition and transformed on test/inference.

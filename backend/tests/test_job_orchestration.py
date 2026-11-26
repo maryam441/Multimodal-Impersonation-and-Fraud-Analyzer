@@ -57,7 +57,19 @@ async def test_full_job_orchestration_all_modalities():
         assert voice_data["status"] == "analyzed"
         assert voice_data["metrics"]["pitch_f0_hz"] == 400.0
 
-        # 7. Check Pipeline Status Telemetry
+        # 7. Analyze Email
+        email_res = await ac.post(f"/api/v1/cases/{case_id}/email", json={
+            "sender": "Security Team <security@fbl-verify.com>",
+            "subject": "Urgent: Verify your account immediately",
+            "body": "Dear customer, your card is blocked. Click http://fbl-verify.com/login",
+            "headers": {"Authentication-Results": "spf=fail dkim=fail"}
+        })
+        assert email_res.status_code == 200
+        email_data = email_res.json()
+        assert email_data["modality"] == "email"
+        assert email_data["status"] == "analyzed"
+
+        # 8. Check Pipeline Status Telemetry
         status_res = await ac.get(f"/api/v1/cases/{case_id}/status")
         assert status_res.status_code == 200
         stages = status_res.json()["pipeline_stages"]
@@ -66,15 +78,16 @@ async def test_full_job_orchestration_all_modalities():
         assert "url" in stages
         assert "conversation" in stages
         assert "voice" in stages
+        assert "email" in stages
         assert stages["message"]["stage"] == "completed"
 
-        # 8. Check Compiled Forensic Report
+        # 9. Check Compiled Forensic Report
         report_res = await ac.get(f"/api/v1/cases/{case_id}/report")
         assert report_res.status_code == 200
         report = report_res.json()
         assert report["case_id"] == case_id
         assert report["status"] == "completed"
-        assert len(report["modality_results"]) == 5
+        assert len(report["modality_results"]) == 6
         fusion = report["fusion_assessment"]
         assert fusion["status"] == "evaluated"
         assert fusion["fused_score"] > 60.0
@@ -97,5 +110,5 @@ async def test_fault_isolation():
         report_res = await ac.get(f"/api/v1/cases/{case_id}/report")
         assert report_res.status_code == 200
         report = report_res.json()
-        assert len(report["fusion_assessment"]["missing_modalities"]) == 4
+        assert len(report["fusion_assessment"]["missing_modalities"]) == 5
         assert "phone" in report["fusion_assessment"]["missing_modalities"]
