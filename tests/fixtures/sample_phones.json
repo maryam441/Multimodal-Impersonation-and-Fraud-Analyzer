@@ -1,0 +1,23 @@
+[
+  {
+    "raw_input": "03001234567",
+    "country_code": "PK",
+    "expected_e164": "+923001234567",
+    "carrier": "Jazz",
+    "line_type": "MOBILE"
+  },
+  {
+    "raw_input": "+92 (51) 227-0000",
+    "country_code": "PK",
+    "expected_e164": "+92512270000",
+    "carrier": "PTCL",
+    "line_type": "FIXED_LINE"
+  },
+  {
+    "raw_input": "+1-800-555-0199",
+    "country_code": "US",
+    "expected_e164": "+18005550199",
+    "carrier": "Toll Free",
+    "line_type": "TOLL_FREE"
+  }
+]

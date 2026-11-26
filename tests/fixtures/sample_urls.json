@@ -1,0 +1,22 @@
+[
+  {
+    "url": "http://192.168.1.1/login-hbl-verify.php?token=84820",
+    "is_phishing": true,
+    "flags": ["IP_IN_HOST", "HTTP_UNENCRYPTED", "SUSPICIOUS_KEYWORD"]
+  },
+  {
+    "url": "https://secure-login.bank-alhabib.verification-update.pk/auth",
+    "is_phishing": true,
+    "flags": ["EXCESSIVE_SUBDOMAINS", "TYPOSQUATTING_TARGET"]
+  },
+  {
+    "url": "https://www.google.com/search?q=cybersecurity+threats",
+    "is_phishing": false,
+    "flags": []
+  },
+  {
+    "url": "https://en.wikipedia.org/wiki/Phishing",
+    "is_phishing": false,
+    "flags": []
+  }
+]

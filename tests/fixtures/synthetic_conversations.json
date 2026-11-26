@@ -1,0 +1,88 @@
+[
+  {
+    "id": "conv-scam-001",
+    "title": "Bank Security Freeze & OTP Harvest",
+    "is_scam": true,
+    "turns": [
+      {
+        "speaker": "Caller",
+        "text": "Dear customer, this is Officer Ahmed from State Bank Fraud Prevention Cell. We detected an unauthorized transaction of PKR 85,000 from your account.",
+        "tactics": ["AUTHORITY_IMPERSONATION", "URGENCY_PRESSURE"]
+      },
+      {
+        "speaker": "User",
+        "text": "What? I did not authorize any transaction! Please stop it.",
+        "tactics": []
+      },
+      {
+        "speaker": "Caller",
+        "text": "Do not panic. We can reverse it immediately, but your account is being frozen. You will receive an SMS with a 6-digit cancellation OTP right now. Read it to me to cancel.",
+        "tactics": ["URGENCY_PRESSURE", "OTP_CREDENTIAL_SOLICITATION"]
+      },
+      {
+        "speaker": "User",
+        "text": "The message says 'Never share this OTP with anyone, including bank staff'.",
+        "tactics": []
+      },
+      {
+        "speaker": "Caller",
+        "text": "That is an automated warning! If you do not provide it within 60 seconds, your funds will be permanently lost and account blacklisted.",
+        "tactics": ["URGENCY_PRESSURE", "AUTHORITY_IMPERSONATION"]
+      }
+    ]
+  },
+  {
+    "id": "conv-scam-002",
+    "title": "Police Accident Extortion Emergency",
+    "is_scam": true,
+    "turns": [
+      {
+        "speaker": "Caller",
+        "text": "Hello, is this the father of Bilal? I am Sub-Inspector Tariq from City Police Station. Your son has been involved in a serious car accident and hit a pedestrian.",
+        "tactics": ["AUTHORITY_IMPERSONATION", "URGENCY_PRESSURE"]
+      },
+      {
+        "speaker": "User",
+        "text": "Oh God! Is Bilal alright? Where is he?",
+        "tactics": []
+      },
+      {
+        "speaker": "Caller",
+        "text": "He is in custody. The victim's family is filing an FIR unless medical damages are settled right now. Send PKR 50,000 via EasyPaisa to this number immediately to avoid his arrest.",
+        "tactics": ["URGENCY_PRESSURE", "FINANCIAL_TRANSFER_DEMAND"]
+      }
+    ]
+  },
+  {
+    "id": "conv-benign-001",
+    "title": "Legitimate Support Inquiry",
+    "is_scam": false,
+    "turns": [
+      {
+        "speaker": "Support",
+        "text": "Thank you for contacting Nayatel Support. My name is Sana. How can I assist you with your internet connection today?",
+        "tactics": []
+      },
+      {
+        "speaker": "User",
+        "text": "Hi Sana, my optical fiber red light is blinking and internet is down.",
+        "tactics": []
+      },
+      {
+        "speaker": "Support",
+        "text": "I see. Let me check the line status from our network terminal. Please restart your router once while I run the diagnostic.",
+        "tactics": []
+      },
+      {
+        "speaker": "User",
+        "text": "Sure, I have turned it off and on again. The light turned green now.",
+        "tactics": []
+      },
+      {
+        "speaker": "Support",
+        "text": "Glad to hear that! The signal level is optimal now. Is there anything else I can help you with?",
+        "tactics": []
+      }
+    ]
+  }
+]

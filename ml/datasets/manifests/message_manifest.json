@@ -1,0 +1,47 @@
+{
+  "modality": "message",
+  "datasets": [
+    {
+      "dataset_name": "Dataset_5971 (Roman Urdu & English SMS Spam/Smishing)",
+      "filename": "Dataset_5971.csv",
+      "source_paper": "LREC-COLING 2024 (2024.lrec-main.422.pdf)",
+      "total_rows": 5971,
+      "columns": ["LABEL", "TEXT", "URL", "EMAIL", "PHONE"],
+      "class_distribution": {
+        "ham": 4844,
+        "Smishing": 616,
+        "spam": 466,
+        "Spam": 23,
+        "smishing": 22
+      },
+      "aggregated_classes": {
+        "ham": 4844,
+        "spam_or_smishing": 1127
+      },
+      "languages": ["Roman Urdu", "English"],
+      "is_multiturn": false,
+      "notes": "Primary benchmark for Roman Urdu and English SMS scam detection."
+    },
+    {
+      "dataset_name": "Financial Scams Detection Dataset",
+      "filename": "Financial scams detection dataset.csv",
+      "total_rows": 523,
+      "columns": ["label", "message"],
+      "class_distribution": {
+        "scam": 310,
+        "ham": 213
+      },
+      "languages": ["English"],
+      "is_multiturn": false,
+      "notes": "Focused supplemental dataset covering loan approval fees, banking fraud, and OTP requests."
+    }
+  ],
+  "preprocessing_strategy": {
+    "normalization": "Lowercasing, entity masking (URL/PHONE tokens), punctuation normalization, whitespace trimming",
+    "token_attribution": "TF-IDF vectorizer + Linear SVM / Logistic Regression coefficient analysis to identify phrase spans"
+  },
+  "known_limitations": [
+    "No standardized orthography for Roman Urdu; phonetic spelling variations (e.g., 'karo', 'kro', 'karain') require resilient n-gram tokenization.",
+    "Single SMS context does not model conversational turn escalation."
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "modality": "voice",
+  "dataset_name": "Cleaned Voice Telecom Fraud & Vishing Dataset",
+  "version": "1.0",
+  "access_date": "2026-10-15",
+  "publisher_provenance": "Custom Telephony Telecom Simulation derived from Mozilla Common Voice Urdu Corpus (v27.0) and Edge-TTS Pakistani Scenarios",
+  "license": "CC-BY-SA-4.0 (Mozilla Common Voice component) / Academic Research Use",
+  "total_samples": 200,
+  "audio_format": {
+    "codec": "PCM S16LE",
+    "channels": 1,
+    "sample_rate_hz": 16000,
+    "container": "wav",
+    "telephony_filtering": "300Hz-3400Hz 4th-order Butterworth bandpass with carrier noise and pitch perturbation"
+  },
+  "class_distribution": {
+    "ham_legitimate": 100,
+    "spam_fraud": 100
+  },
+  "languages": {
+    "urdu": 160,
+    "english": 40
+  },
+  "categories": {
+    "Legitimate_Conversation": 100,
+    "Bank_OTP_Scam": 24,
+    "Relative_Impersonation_Scam": 20,
+    "Lottery_Prize_Scam": 20,
+    "Law_Enforcement_Threat": 16,
+    "Telecom_SIM_Scam": 12,
+    "Fake_Loan_Tech_Scam": 8
+  },
+  "train_test_split": {
+    "train_samples": 160,
+    "train_ham": 80,
+    "train_spam": 80,
+    "test_samples": 40,
+    "test_ham": 20,
+    "test_spam": 20,
+    "split_strategy": "Stratified random split with seed 42"
+  },
+  "feature_schema": {
+    "acoustic_feature_count": 35,
+    "features": [
+      "rms_energy", "zero_crossing_rate", "spectral_centroid", "spectral_bandwidth",
+      "spectral_rolloff", "spectral_flatness", "pitch_f0", "jitter", "shimmer",
+      "mfcc_1_mean", "mfcc_2_mean", "mfcc_3_mean", "mfcc_4_mean", "mfcc_5_mean",
+      "mfcc_6_mean", "mfcc_7_mean", "mfcc_8_mean", "mfcc_9_mean", "mfcc_10_mean",
+      "mfcc_11_mean", "mfcc_12_mean", "mfcc_13_mean",
+      "mfcc_1_std", "mfcc_2_std", "mfcc_3_std", "mfcc_4_std", "mfcc_5_std",
+      "mfcc_6_std", "mfcc_7_std", "mfcc_8_std", "mfcc_9_std", "mfcc_10_std",
+      "mfcc_11_std", "mfcc_12_std", "mfcc_13_std"
+    ]
+  },
+  "known_limitations": [
+    "Fraud samples are generated using neural TTS with realistic telecom channel simulation; real-world acoustic compression and background noise variations may exhibit domain shift.",
+    "Short clips (<1.0s) have insufficient temporal length for stable pitch F0 and jitter estimation."
+  ]
+}

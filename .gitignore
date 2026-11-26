@@ -38,16 +38,18 @@ ENV/
 env.bak/
 venv.bak/
 
-# Datasets and Large Data Files (Strict Rule: Zero datasets/audio committed)
-datasets/
-phone_dataset/
+# Datasets and Large Data Files (Strict Rule: Zero raw datasets/audio committed)
+/datasets/
+/phone_dataset/
 *.csv
 *.xlsx
 *.parquet
 *.tar.gz
 *.zip
 *.7z
-# Allow small synthetic test fixtures under tests/fixtures
+
+# Explicitly allow manifests and test fixtures
+!ml/datasets/manifests/*.json
 !tests/fixtures/*.csv
 !tests/fixtures/*.json
 
@@ -61,8 +63,8 @@ phone_dataset/
 *.wma
 
 # Trained Model Binaries and Scalers (Strict Rule: Zero binary weights committed)
-trained_models/
-ml/artifacts/
+/trained_models/
+/ml/artifacts/
 *.pkl
 *.joblib
 *.pth

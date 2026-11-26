@@ -1,0 +1,21 @@
+{
+  "modality": "conversation",
+  "dataset_status": "SYNTHETIC_BENCHMARK_GENERATION",
+  "audit_finding": "Inspection of owner message datasets (Dataset_5971.csv and Financial scams) revealed 0 multi-turn conversations. Single-message classifiers cannot be conflated with multi-turn social engineering detection.",
+  "solution": "Curated, clearly labeled synthetic multi-turn conversation benchmarks representing realistic social-engineering dialogues with turn-by-turn psychological tactic annotations.",
+  "tactic_taxonomy": [
+    "URGENCY_PRESSURE",
+    "AUTHORITY_IMPERSONATION",
+    "OTP_CREDENTIAL_SOLICITATION",
+    "FINANCIAL_TRANSFER_DEMAND",
+    "PLATFORM_MIGRATION_SWITCH"
+  ],
+  "benchmark_scenarios": [
+    "Bank Security Impersonation & Account Lockout Dialogue",
+    "Emergency Family Relative Incarceration / Accident Extortion",
+    "Law Enforcement / Police Fine Intimidation",
+    "Telecom SIM Verification & Biometric Re-registration Scam",
+    "Legitimate Customer Support Inquiry (Benign Baseline)",
+    "Legitimate Peer-to-Peer Dialogue (Benign Baseline)"
+  ]
+}

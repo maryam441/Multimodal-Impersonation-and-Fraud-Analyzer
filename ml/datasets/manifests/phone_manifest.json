@@ -1,0 +1,21 @@
+{
+  "modality": "phone",
+  "dataset_status": "FIXTURES_AND_ADAPTER_ONLY",
+  "existing_local_data": {
+    "source": "phone_dataset/phone_numbers_dataset.csv",
+    "record_count": 10,
+    "origin": "Scraped complaints from whoseno.com blog",
+    "audit_verdict": "Unsuitable for production ML training due to lack of ground truth, small sample size, and privacy constraints."
+  },
+  "policy_mandate": {
+    "synthetic_benchmark": "Synthetic phone fixtures are used exclusively for pipeline format testing and E.164 normalization checks.",
+    "zero_fake_verdicts": "The system will NEVER declare a real telephone subscriber fraudulent based solely on synthetic data.",
+    "transparent_status": "When no verified reputation provider is connected, the phone analyzer returns status 'insufficient_data' or 'unavailable'."
+  },
+  "supported_features": [
+    "E.164 International Normalization (Google phonenumbers library)",
+    "Country / National Destination Code detection (e.g., Pakistan +92, US +1, UK +44)",
+    "Line Type Detection (Mobile, Fixed Line, VoIP, Toll-Free where lawful)",
+    "Telecom Carrier Identification (e.g., Jazz, Telenor, Zong, Ufone in Pakistan)"
+  ]
+}

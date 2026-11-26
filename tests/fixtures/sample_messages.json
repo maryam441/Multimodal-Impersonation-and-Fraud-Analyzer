@@ -1,0 +1,30 @@
+[
+  {
+    "id": "msg-001",
+    "text": "Apka HBL account blocked hai biometric na hone ki waja se. Fori is link per click kr k update krain: bit.ly/hbl-secure",
+    "language": "Roman Urdu",
+    "expected_label": "spam",
+    "expected_category": "Bank_Biometric_Scam"
+  },
+  {
+    "id": "msg-002",
+    "text": "Congratulations! You have won PKR 500,000 from Jeeto Pakistan Ramadan Scheme. Send your CNIC and 2000 processing fee to 0301-1234567 to claim.",
+    "language": "English",
+    "expected_label": "spam",
+    "expected_category": "Lottery_Prize_Scam"
+  },
+  {
+    "id": "msg-003",
+    "text": "Salam bhai, kal university kitne bje ana hai? Assignments submit karwani hain.",
+    "language": "Roman Urdu",
+    "expected_label": "ham",
+    "expected_category": "Legitimate_Personal"
+  },
+  {
+    "id": "msg-004",
+    "text": "Your OTP for Meezan Digital Banking login is 849201. Valid for 5 minutes. Do not share this OTP with anyone.",
+    "language": "English",
+    "expected_label": "ham",
+    "expected_category": "Legitimate_Transactional_OTP"
+  }
+]
