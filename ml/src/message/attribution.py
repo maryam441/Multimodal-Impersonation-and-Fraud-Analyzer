@@ -17,6 +17,8 @@ SCAM_PATTERNS = [
     # Urgency & Panic Induction
     (r'\b(?:fori|urgent|immediately|within 24 hours|aaj hi|abhi)\b', 'ARTIFICIAL_URGENCY', 'Artificial Time Pressure & Deadline Induction', 'medium'),
     (r'\b(?:click here|is link per|visit link|download app)\b', 'MALICIOUS_LINK_REDIRECT', 'Urging Click on Embedded Link', 'high'),
+    (r'\b(?:transfer|send|jama karwayen|bhejen)\s+(?:pkr|rs|money|rupees|\d+)\b', 'FUNDS_TRANSFER_DEMAND', 'Immediate Peer-to-Peer Funds Transfer Demand', 'high'),
+    (r'\b(?:police|fia|arrest|jail|fir|case darj)\b', 'LEGAL_THREAT_EXTORTION', 'Law Enforcement Arrest Extortion Threat', 'critical'),
 ]
 
 def extract_phrase_attributions(text: str) -> List[Dict[str, Any]]:

@@ -137,36 +137,28 @@ async def get_forensic_report(case_id: str, db: AsyncSession = Depends(get_db)):
     stmt = select(ModalityResult).where(ModalityResult.case_id == case_id)
     results = (await db.execute(stmt)).scalars().all()
 
-    active_modalities = [r.modality for r in results]
-    scores = [r.risk_score for r in results if r.risk_score is not None and r.status == "analyzed"]
+    from backend.app.services.fusion_service import FusionEngine, ModalityScoreInput
 
-    fused_score = round(sum(scores) / len(scores), 1) if scores else None
-    risk_category = "inconclusive"
-    if fused_score is not None:
-        if fused_score <= 30.0:
-            risk_category = "low"
-        elif fused_score <= 60.0:
-            risk_category = "medium"
-        else:
-            risk_category = "high"
+    fusion_engine = FusionEngine()
+    modality_inputs = [
+        ModalityScoreInput(
+            modality=r.modality,
+            status=r.status,
+            risk_score=r.risk_score,
+            confidence=r.confidence,
+            is_extracted_from_text=bool(r.metrics.get("extracted_from_text", False)) if r.metrics else False
+        )
+        for r in results
+    ]
 
-    all_modalities = ["voice", "message", "conversation", "url", "phone"]
-    missing_modalities = [m for m in all_modalities if m not in active_modalities]
+    fusion_assessment = fusion_engine.evaluate_fusion(modality_inputs)
 
     return {
         "case_id": case_id,
         "status": "completed" if results else "created",
         "created_at": case_obj.created_at.isoformat(),
         "expires_at": case_obj.expires_at.isoformat(),
-        "fusion_assessment": {
-            "fused_score": fused_score,
-            "risk_category": risk_category,
-            "status": "evaluated" if fused_score is not None else "inconclusive",
-            "active_modalities": active_modalities,
-            "missing_modalities": missing_modalities,
-            "missing_policy": "Unprovided modalities are treated as Neutral (Never imputed as zero risk)",
-            "rationale": f"Fused average across {len(scores)} active scored modalities." if scores else "Evidence insufficient for numerical score."
-        },
+        "fusion_assessment": fusion_assessment,
         "modality_results": [
             {
                 "modality": r.modality,
