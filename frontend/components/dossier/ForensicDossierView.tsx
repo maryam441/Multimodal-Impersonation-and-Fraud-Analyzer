@@ -8,6 +8,7 @@ import { FusionConstellation } from "./FusionConstellation";
 import { UrlAnatomyCard } from "./UrlAnatomyCard";
 import { ChatReplay } from "./ChatReplay";
 import { VoiceAnomalyCard } from "./VoiceAnomalyCard";
+import { EmailAnalysisCard } from "./EmailAnalysisCard";
 import { GroundedAssistantDrawer } from "./GroundedAssistantDrawer";
 import { HumanGateModal } from "./HumanGateModal";
 
@@ -27,6 +28,7 @@ export function ForensicDossierView({ report, onReset }: ForensicDossierViewProp
   const voiceResult = modality_results.find(m => m.modality === "voice");
   const messageResult = modality_results.find(m => m.modality === "message");
   const phoneResult = modality_results.find(m => m.modality === "phone");
+  const emailResult = modality_results.find(m => m.modality === "email");
 
   const handleConfirmAction = async (notes?: string) => {
     if (modalAction === "export") {
@@ -117,6 +119,10 @@ export function ForensicDossierView({ report, onReset }: ForensicDossierViewProp
           </div>
 
           {/* Modality Specific Explainability Cards */}
+          {emailResult && emailResult.status === "analyzed" && (
+            <EmailAnalysisCard emailResult={emailResult} />
+          )}
+
           {urlResult && urlResult.status === "analyzed" && (
             <UrlAnatomyCard urlResult={urlResult} />
           )}

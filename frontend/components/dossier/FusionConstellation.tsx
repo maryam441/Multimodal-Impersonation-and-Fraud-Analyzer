@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Mic, MessageSquare, MessagesSquare, Globe, Phone, Network, AlertCircle } from "lucide-react";
+import { Mic, MessageSquare, MessagesSquare, Globe, Phone, Mail, Network, AlertCircle } from "lucide-react";
 import { FusionAssessment, ModalityResultItem } from "@/lib/api";
 
 interface FusionConstellationProps {
@@ -14,6 +14,7 @@ export function FusionConstellation({ assessment, modalityResults }: FusionConst
     { id: "voice", label: "Voice Acoustic", icon: Mic },
     { id: "message", label: "Message NLP", icon: MessageSquare },
     { id: "conversation", label: "Multi-Turn Thread", icon: MessagesSquare },
+    { id: "email", label: "Email Header/Body", icon: Mail },
     { id: "url", label: "URL Anatomy", icon: Globe },
     { id: "phone", label: "Phone Identifier", icon: Phone },
   ];
@@ -38,8 +39,8 @@ export function FusionConstellation({ assessment, modalityResults }: FusionConst
         <span>{assessment.missing_policy}</span>
       </div>
 
-      {/* Constellation Grid of 5 Modalities */}
-      <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 my-auto">
+      {/* Constellation Grid of 6 Modalities */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 my-auto">
         {allModalities.map(mod => {
           const result = modalityResults.find(r => r.modality === mod.id);
           const isActive = assessment.active_modalities.includes(mod.id);
