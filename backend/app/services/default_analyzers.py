@@ -253,9 +253,10 @@ class VoiceAnalyzer(BaseModalityAnalyzer):
 from backend.app.services.voice_service import VoiceServiceAnalyzer
 from backend.app.services.message_service import MessageServiceAnalyzer
 from backend.app.services.conversation_service import ConversationServiceAnalyzer
+from backend.app.services.url_service import URLServiceAnalyzer
 
 phone_analyzer = PhoneAnalyzer()
 message_analyzer = MessageServiceAnalyzer()
-url_analyzer = URLAnalyzer()
+url_analyzer = URLServiceAnalyzer()
 conversation_analyzer = ConversationServiceAnalyzer()
 voice_analyzer = VoiceServiceAnalyzer()
