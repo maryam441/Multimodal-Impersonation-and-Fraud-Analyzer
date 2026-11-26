@@ -17,6 +17,10 @@ from backend.app.services.extractor import extract_entities, defang_url
 TRUSTED_BRAND_KEYWORDS = [
     ("state bank", "sbp.org.pk"),
     ("hbl", "hbl.com"),
+    ("habib bank", "hbl.com"),
+    ("habib", "hbl.com"),
+    ("faysal bank", "faysalbank.com"),
+    ("faysal", "faysalbank.com"),
     ("meezan", "meezanbank.com"),
     ("bank alfalah", "bankalfalah.com"),
     ("ubl", "ubldigital.com"),
@@ -87,8 +91,10 @@ class EmailServiceAnalyzer(BaseModalityAnalyzer):
         is_spoofed_brand = False
         for brand, official_domain in TRUSTED_BRAND_KEYWORDS:
             if brand in display_name:
+                metrics["brand_impersonated"] = brand.upper()
                 if official_domain not in sender_domain:
                     is_spoofed_brand = True
+                    metrics["display_name_spoof_detected"] = True
                     base_score += 40.0
                     signals.append(EvidenceSignal(
                         code="DISPLAY_NAME_BRAND_SPOOF",
