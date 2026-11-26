@@ -1,0 +1,39 @@
+{
+  "dataset_name": "Email Phishing & Header Impersonation Benchmark",
+  "version": "1.0",
+  "date_audited": "2026-11-26",
+  "modality": "email",
+  "source_benchmarks": [
+    "Nazario Phishing Corpus (RFC 2822)",
+    "SpamAssassin Public Phishing Archive",
+    "Synthetic Pakistani Banking & Corporate Spear-Phishing Fixtures"
+  ],
+  "license": "Public Domain / Open Data / Synthetic",
+  "schema": {
+    "sender": "string (Display Name + Email Address)",
+    "reply_to": "string (Optional alternate Return-Path)",
+    "subject": "string",
+    "body_text": "string",
+    "headers": {
+      "spf": "string (Pass, Fail, SoftFail, None)",
+      "dkim": "string (Pass, Fail, None)",
+      "dmarc": "string (Pass, Fail, None)"
+    },
+    "embedded_urls": "array of strings",
+    "label": "string (phishing | benign)",
+    "scam_category": "string"
+  },
+  "scam_categories": [
+    "Bank Account Suspension & Verification Pretext",
+    "Urgent Wire Transfer & CEO Fraud (BEC)",
+    "State Bank of Pakistan (SBP) Compliance Directive Spoofing",
+    "Fake Invoice & Malicious Attachment Notice",
+    "Credentials Expired & Password Reset Phishing"
+  ],
+  "sample_count": 1200,
+  "class_distribution": {
+    "phishing": 600,
+    "benign": 600
+  },
+  "cautious_policy": "No live web fetching of embedded URLs or attachments. Inspection is performed via static RFC header alignment and lexical body extraction."
+}

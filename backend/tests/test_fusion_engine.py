@@ -22,7 +22,7 @@ def test_missingness_neutrality():
     assert res["status"] == "evaluated"
     assert res["fused_score"] == 80.0
     assert res["risk_category"] == "high"
-    assert set(res["missing_modalities"]) == {"url", "phone", "conversation"}
+    assert set(res["missing_modalities"]) == {"url", "phone", "conversation", "email"}
 
 
 def test_exact_boundary_thresholds():

@@ -9,10 +9,11 @@ from dataclasses import dataclass
 
 
 DEFAULT_MODALITY_WEIGHTS = {
-    "voice": 0.30,
-    "message": 0.25,
-    "conversation": 0.25,
-    "url": 0.15,
+    "voice": 0.25,
+    "message": 0.20,
+    "conversation": 0.20,
+    "email": 0.20,
+    "url": 0.10,
     "phone": 0.05
 }
 
