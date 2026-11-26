@@ -1,12 +1,23 @@
 "use client";
 
 import React, { useState } from "react";
-import { Mic, MessageSquare, MessagesSquare, Link2, PhoneCall, Sparkles, ShieldAlert, Play, CheckCircle2, ArrowRight } from "lucide-react";
+import { Mic, MessageSquare, MessagesSquare, Link2, PhoneCall, Sparkles, ShieldAlert, Play, CheckCircle2, ArrowRight, Loader2 } from "lucide-react";
 import { VoiceCard } from "./studio/VoiceCard";
 import { MessageCard } from "./studio/MessageCard";
 import { ConversationCard } from "./studio/ConversationCard";
 import { URLCard } from "./studio/URLCard";
 import { PhoneCard } from "./studio/PhoneCard";
+import { ForensicDossierView } from "./dossier/ForensicDossierView";
+import {
+  createCase,
+  analyzeVoice,
+  analyzeMessage,
+  analyzeConversation,
+  analyzeUrl,
+  analyzePhone,
+  getForensicReport,
+  ForensicReportResponse
+} from "@/lib/api";
 
 export function EvidenceStudioShell() {
   const [activeModalities, setActiveModalities] = useState<{ [key: string]: boolean }>({
@@ -20,6 +31,12 @@ export function EvidenceStudioShell() {
   const [consentGiven, setConsentGiven] = useState(true);
   const [extractedURL, setExtractedURL] = useState<string | null>("http://secure-hbl.phish.pk/verify");
   const [extractedPhone, setExtractedPhone] = useState<string | null>("0300-1234567");
+
+  // State for analysis progress and dossier result
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisStage, setAnalysisStage] = useState<string>("");
+  const [dossierReport, setDossierReport] = useState<ForensicReportResponse | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const toggleModality = (key: string) => {
     setActiveModalities(prev => ({ ...prev, [key]: !prev[key] }));
@@ -54,7 +71,70 @@ export function EvidenceStudioShell() {
     }
   };
 
+  const handleExecuteAnalysis = async () => {
+    if (!consentGiven) return;
+    setIsAnalyzing(true);
+    setErrorMessage(null);
+
+    try {
+      setAnalysisStage("Initializing ephemeral case container...");
+      const caseObj = await createCase(24);
+      const caseId = caseObj.case_id;
+
+      const tasks: Promise<any>[] = [];
+
+      if (activeModalities.voice) {
+        setAnalysisStage("Extracting 35 acoustic metrics & deepfake spans...");
+        tasks.push(analyzeVoice(caseId).catch(err => console.warn("Voice error", err)));
+      }
+
+      if (activeModalities.message) {
+        setAnalysisStage("Tokenizing Roman Urdu & English phrase attributions...");
+        const text = "Urgent: Your HBL account is blocked! Submit 6-digit OTP code now.";
+        tasks.push(analyzeMessage(caseId, text).catch(err => console.warn("Message error", err)));
+      }
+
+      if (activeModalities.conversation) {
+        setAnalysisStage("Parsing multi-turn escalation velocity...");
+        const conv = "[10:14] Support: Your account is compromised. Transfer funds immediately.";
+        tasks.push(analyzeConversation(caseId, conv).catch(err => console.warn("Conversation error", err)));
+      }
+
+      if (activeModalities.url) {
+        setAnalysisStage("Defanging URL and calculating Shannon entropy...");
+        const targetUrl = extractedURL || "http://secure-hbl.phish.pk/verify";
+        tasks.push(analyzeUrl(caseId, targetUrl).catch(err => console.warn("URL error", err)));
+      }
+
+      if (activeModalities.phone) {
+        setAnalysisStage("Standardizing E.164 & resolving PTA carrier plan...");
+        const phone = extractedPhone || "0300-1234567";
+        tasks.push(analyzePhone(caseId, phone).catch(err => console.warn("Phone error", err)));
+      }
+
+      await Promise.all(tasks);
+
+      setAnalysisStage("Evaluating transparent weighted late fusion...");
+      const report = await getForensicReport(caseId);
+      setDossierReport(report);
+    } catch (err: any) {
+      console.error("Analysis failed:", err);
+      setErrorMessage(err.message || "Failed to complete multimodal analysis. Please ensure backend is running.");
+    } finally {
+      setIsAnalyzing(false);
+      setAnalysisStage("");
+    }
+  };
+
   const activeCount = Object.values(activeModalities).filter(Boolean).length;
+
+  if (dossierReport) {
+    return (
+      <section id="evidence-dossier" className="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <ForensicDossierView report={dossierReport} onReset={() => setDossierReport(null)} />
+      </section>
+    );
+  }
 
   return (
     <section id="evidence-studio" className="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -73,39 +153,39 @@ export function EvidenceStudioShell() {
         </div>
 
         {/* Preset Selector */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-[11px] font-mono text-slate-500">Preset Demos:</span>
+        <div className="flex items-center space-x-2">
+          <span className="text-xs font-mono text-slate-400">Benchmarks:</span>
           <button
             type="button"
             onClick={() => loadPreset("bank")}
-            className="px-2.5 py-1 text-xs rounded bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 font-mono transition-colors"
+            className="px-2.5 py-1 text-xs rounded font-mono bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors"
           >
-            [DEMO] Bank Scam
+            Bank Scam
           </button>
           <button
             type="button"
             onClick={() => loadPreset("family")}
-            className="px-2.5 py-1 text-xs rounded bg-slate-800 hover:bg-slate-700 text-purple-300 border border-slate-700 font-mono transition-colors"
+            className="px-2.5 py-1 text-xs rounded font-mono bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors"
           >
-            [DEMO] Family Emergency
+            Emergency Call
           </button>
           <button
             type="button"
             onClick={() => loadPreset("benign")}
-            className="px-2.5 py-1 text-xs rounded bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-slate-700 font-mono transition-colors"
+            className="px-2.5 py-1 text-xs rounded font-mono bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors"
           >
-            [DEMO] Legitimate Bank
+            Clean Portal
           </button>
         </div>
       </div>
 
-      {/* Modality Toggles Bar */}
-      <div className="my-6 grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+      {/* Modality Toggles Dock */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 my-6">
         {[
-          { id: "voice", label: "Voice Audio", icon: Mic },
+          { id: "voice", label: "Voice / Audio", icon: Mic },
           { id: "message", label: "Single Message", icon: MessageSquare },
           { id: "conversation", label: "Multi-Turn Chat", icon: MessagesSquare },
-          { id: "url", label: "Phishing URL", icon: Link2 },
+          { id: "url", label: "Suspicious URL", icon: Link2 },
           { id: "phone", label: "Phone Number", icon: PhoneCall },
         ].map(item => {
           const Icon = item.icon;
@@ -184,6 +264,13 @@ export function EvidenceStudioShell() {
         </span>
       </div>
 
+      {/* Error message display if any */}
+      {errorMessage && (
+        <div className="mt-4 p-3 rounded-xl border border-rose-500/40 bg-rose-950/40 text-rose-300 text-xs font-mono">
+          {errorMessage}
+        </div>
+      )}
+
       {/* Consent & Submission Bar */}
       <div className="mt-6 p-4 rounded-xl bg-slate-900/90 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <label className="flex items-center space-x-2.5 cursor-pointer">
@@ -200,11 +287,21 @@ export function EvidenceStudioShell() {
 
         <button
           type="button"
-          disabled={!consentGiven || activeCount === 0}
-          className="inline-flex items-center justify-center space-x-2 px-6 py-2.5 rounded-lg bg-gradient-to-r from-cyan-500 to-teal-500 text-slate-950 font-bold font-mono text-xs hover:from-cyan-400 hover:to-teal-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md active:scale-95"
+          disabled={!consentGiven || activeCount === 0 || isAnalyzing}
+          onClick={handleExecuteAnalysis}
+          className="inline-flex items-center justify-center space-x-2 px-6 py-2.5 rounded-lg bg-gradient-to-r from-cyan-500 to-teal-500 text-slate-950 font-bold font-mono text-xs hover:from-cyan-400 hover:to-teal-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md active:scale-95 shrink-0"
         >
-          <Play className="w-3.5 h-3.5 fill-current" />
-          <span>Execute Multimodal Analysis ({activeCount})</span>
+          {isAnalyzing ? (
+            <>
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              <span>{analysisStage || "Analyzing..."}</span>
+            </>
+          ) : (
+            <>
+              <Play className="w-3.5 h-3.5 fill-current" />
+              <span>Execute Multimodal Analysis ({activeCount})</span>
+            </>
+          )}
         </button>
       </div>
     </section>
