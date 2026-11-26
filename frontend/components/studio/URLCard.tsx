@@ -12,6 +12,10 @@ interface URLCardProps {
 export function URLCard({ initialURL = "http://secure-hbl.phish.pk/verify?token=8942", onURLChange }: URLCardProps) {
   const [url, setURL] = useState(initialURL);
 
+  React.useEffect(() => {
+    if (initialURL) setURL(initialURL);
+  }, [initialURL]);
+
   const defanged = defangURL(url);
 
   // Structural anatomy extraction

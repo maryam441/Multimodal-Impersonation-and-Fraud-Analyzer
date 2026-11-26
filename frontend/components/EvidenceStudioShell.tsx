@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Mic, MessageSquare, MessagesSquare, Link2, PhoneCall, Sparkles, ShieldAlert, Play, CheckCircle2, ArrowRight, Loader2 } from "lucide-react";
+import { Mic, MessageSquare, MessagesSquare, Link2, PhoneCall, Sparkles, Play, Loader2 } from "lucide-react";
 import { VoiceCard } from "./studio/VoiceCard";
 import { MessageCard } from "./studio/MessageCard";
 import { ConversationCard } from "./studio/ConversationCard";
@@ -28,6 +28,17 @@ export function EvidenceStudioShell() {
     phone: false,
   });
 
+  // User input states across modalities
+  const [messageText, setMessageText] = useState(
+    "Apka HBL account blocked hai biometric na hone ki waja se. Fori is link per click kr k update krain: http://secure-hbl.phish.pk/verify ya helpline 0300-1234567 pr rabta krain."
+  );
+  const [urlText, setUrlText] = useState("http://secure-hbl.phish.pk/verify");
+  const [phoneText, setPhoneText] = useState("0300-1234567");
+  const [conversationText, setConversationText] = useState(
+    "[10:14] Officer: This is Sub-Inspector Farooq from FIA. Your account has an FIR.\n[10:15] Citizen: What FIR?\n[10:16] Officer: Settle Rs. 50,000 immediately via Easypaisa or face arrest."
+  );
+  const [voiceFile, setVoiceFile] = useState("spam_test_001_Bank_OTP_Scam.wav");
+
   const [consentGiven, setConsentGiven] = useState(true);
   const [extractedURL, setExtractedURL] = useState<string | null>("http://secure-hbl.phish.pk/verify");
   const [extractedPhone, setExtractedPhone] = useState<string | null>("0300-1234567");
@@ -45,29 +56,45 @@ export function EvidenceStudioShell() {
   const loadPreset = (preset: "bank" | "family" | "benign") => {
     if (preset === "bank") {
       setActiveModalities({ voice: true, message: true, conversation: false, url: true, phone: false });
+      setMessageText("Apka HBL account blocked hai biometric na hone ki waja se. Fori is link per click kr k update krain: http://secure-hbl.phish.pk/verify ya helpline 0300-1234567 pr rabta krain.");
+      setUrlText("http://secure-hbl.phish.pk/verify");
+      setPhoneText("0300-1234567");
       setExtractedURL("http://secure-hbl.phish.pk/verify");
       setExtractedPhone("0300-1234567");
     } else if (preset === "family") {
       setActiveModalities({ voice: false, message: false, conversation: true, url: false, phone: true });
+      setConversationText("[10:14] Officer: This is Sub-Inspector Farooq from FIA. Your account has an FIR.\n[10:15] Citizen: What FIR?\n[10:16] Officer: Settle Rs. 50,000 immediately via Easypaisa or face arrest.");
+      setPhoneText("+92 321 9876543");
       setExtractedURL(null);
       setExtractedPhone("+92 321 9876543");
     } else {
       setActiveModalities({ voice: false, message: true, conversation: false, url: true, phone: false });
+      setMessageText("Dear Customer, thank you for banking with Meezan Bank. Visit our official portal for secure online banking services.");
+      setUrlText("https://www.meezanbank.com");
+      setPhoneText("");
       setExtractedURL("https://www.meezanbank.com");
       setExtractedPhone(null);
     }
   };
 
   const handleEntityDetection = (url?: string, phone?: string) => {
-    if (url) setExtractedURL(url);
-    if (phone) setExtractedPhone(phone);
+    if (url) {
+      setExtractedURL(url);
+      setUrlText(url);
+    }
+    if (phone) {
+      setExtractedPhone(phone);
+      setPhoneText(phone);
+    }
   };
 
   const applyExtractedEntity = (type: "url" | "phone") => {
-    if (type === "url") {
+    if (type === "url" && extractedURL) {
       setActiveModalities(prev => ({ ...prev, url: true }));
-    } else {
+      setUrlText(extractedURL);
+    } else if (type === "phone" && extractedPhone) {
       setActiveModalities(prev => ({ ...prev, phone: true }));
+      setPhoneText(extractedPhone);
     }
   };
 
@@ -85,31 +112,27 @@ export function EvidenceStudioShell() {
 
       if (activeModalities.voice) {
         setAnalysisStage("Extracting 35 acoustic metrics & deepfake spans...");
-        tasks.push(analyzeVoice(caseId).catch(err => console.warn("Voice error", err)));
+        tasks.push(analyzeVoice(caseId, undefined, voiceFile).catch(err => console.warn("Voice error", err)));
       }
 
       if (activeModalities.message) {
         setAnalysisStage("Tokenizing Roman Urdu & English phrase attributions...");
-        const text = "Urgent: Your HBL account is blocked! Submit 6-digit OTP code now.";
-        tasks.push(analyzeMessage(caseId, text).catch(err => console.warn("Message error", err)));
+        tasks.push(analyzeMessage(caseId, messageText).catch(err => console.warn("Message error", err)));
       }
 
       if (activeModalities.conversation) {
         setAnalysisStage("Parsing multi-turn escalation velocity...");
-        const conv = "[10:14] Support: Your account is compromised. Transfer funds immediately.";
-        tasks.push(analyzeConversation(caseId, conv).catch(err => console.warn("Conversation error", err)));
+        tasks.push(analyzeConversation(caseId, conversationText).catch(err => console.warn("Conversation error", err)));
       }
 
       if (activeModalities.url) {
         setAnalysisStage("Defanging URL and calculating Shannon entropy...");
-        const targetUrl = extractedURL || "http://secure-hbl.phish.pk/verify";
-        tasks.push(analyzeUrl(caseId, targetUrl).catch(err => console.warn("URL error", err)));
+        tasks.push(analyzeUrl(caseId, urlText).catch(err => console.warn("URL error", err)));
       }
 
       if (activeModalities.phone) {
         setAnalysisStage("Standardizing E.164 & resolving PTA carrier plan...");
-        const phone = extractedPhone || "0300-1234567";
-        tasks.push(analyzePhone(caseId, phone).catch(err => console.warn("Phone error", err)));
+        tasks.push(analyzePhone(caseId, phoneText).catch(err => console.warn("Phone error", err)));
       }
 
       await Promise.all(tasks);
@@ -148,7 +171,7 @@ export function EvidenceStudioShell() {
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-1">
-            Activate one or more evidence modalities. Smart cross-modality extraction auto-populates embedded links and numbers.
+            Type or paste your suspicious message, link, phone number, or chat below. You can also select pre-configured benchmarks.
           </p>
         </div>
 
@@ -247,11 +270,32 @@ export function EvidenceStudioShell() {
 
       {/* Active Modality Input Cards Canvas */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {activeModalities.voice && <VoiceCard />}
-        {activeModalities.message && <MessageCard onDetectEntities={handleEntityDetection} />}
-        {activeModalities.conversation && <ConversationCard />}
-        {activeModalities.url && <URLCard initialURL={extractedURL || undefined} />}
-        {activeModalities.phone && <PhoneCard initialPhone={extractedPhone || undefined} />}
+        {activeModalities.voice && <VoiceCard onAudioChange={setVoiceFile} />}
+        {activeModalities.message && (
+          <MessageCard
+            value={messageText}
+            onTextChange={setMessageText}
+            onDetectEntities={handleEntityDetection}
+          />
+        )}
+        {activeModalities.conversation && (
+          <ConversationCard
+            value={conversationText}
+            onTextChange={setConversationText}
+          />
+        )}
+        {activeModalities.url && (
+          <URLCard
+            initialURL={urlText}
+            onURLChange={setUrlText}
+          />
+        )}
+        {activeModalities.phone && (
+          <PhoneCard
+            initialPhone={phoneText}
+            onPhoneChange={setPhoneText}
+          />
+        )}
       </div>
 
       {/* Unprovided Modality Indicator Bar (Missingness Neutrality) */}

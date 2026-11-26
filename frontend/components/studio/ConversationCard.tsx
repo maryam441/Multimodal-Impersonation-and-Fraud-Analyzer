@@ -8,7 +8,12 @@ interface Turn {
   text: string;
 }
 
-export function ConversationCard() {
+interface ConversationCardProps {
+  value?: string;
+  onTextChange?: (text: string) => void;
+}
+
+export function ConversationCard({ value, onTextChange }: ConversationCardProps = {}) {
   const [turns, setTurns] = useState<Turn[]>([
     { speaker: "Caller", text: "Officer Tariq from Police HQ. Your son has been detained in a severe accident." },
     { speaker: "User", text: "Is he okay? Where are you taking him?" },
@@ -17,8 +22,14 @@ export function ConversationCard() {
 
   const [rawMode, setRawMode] = useState(false);
   const [rawText, setRawText] = useState(
-    "Caller: Officer Tariq from Police HQ. Your son has been detained.\nUser: Is he okay?\nCaller: Transfer PKR 50,000 immediately or we register the FIR!"
+    value || "Caller: Officer Tariq from Police HQ. Your son has been detained.\nUser: Is he okay?\nCaller: Transfer PKR 50,000 immediately or we register the FIR!"
   );
+
+  React.useEffect(() => {
+    if (value !== undefined) {
+      setRawText(value);
+    }
+  }, [value]);
 
   return (
     <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
@@ -42,7 +53,10 @@ export function ConversationCard() {
         <textarea
           rows={5}
           value={rawText}
-          onChange={e => setRawText(e.target.value)}
+          onChange={e => {
+            setRawText(e.target.value);
+            if (onTextChange) onTextChange(e.target.value);
+          }}
           placeholder="Paste conversation (e.g., Sender: ... / Me: ...)"
           className="w-full text-xs font-mono p-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-200 focus:outline-none focus:border-cyan-500/60"
         />

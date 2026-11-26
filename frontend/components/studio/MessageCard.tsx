@@ -4,14 +4,19 @@ import React, { useState } from "react";
 import { MessageSquare, Sparkles } from "lucide-react";
 
 interface MessageCardProps {
+  value?: string;
   onTextChange?: (text: string) => void;
   onDetectEntities?: (url?: string, phone?: string) => void;
 }
 
-export function MessageCard({ onTextChange, onDetectEntities }: MessageCardProps) {
+export function MessageCard({ value, onTextChange, onDetectEntities }: MessageCardProps) {
   const [text, setText] = useState<string>(
-    "Apka HBL account blocked hai biometric na hone ki waja se. Fori is link per click kr k update krain: http://secure-hbl.phish.pk/verify ya helpline 0300-1234567 pr rabta krain."
+    value || "Apka HBL account blocked hai biometric na hone ki waja se. Fori is link per click kr k update krain: http://secure-hbl.phish.pk/verify ya helpline 0300-1234567 pr rabta krain."
   );
+
+  React.useEffect(() => {
+    if (value !== undefined) setText(value);
+  }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;

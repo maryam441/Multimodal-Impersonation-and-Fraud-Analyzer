@@ -11,6 +11,10 @@ interface PhoneCardProps {
 export function PhoneCard({ initialPhone = "+92 300 1234567", onPhoneChange }: PhoneCardProps) {
   const [phone, setPhone] = useState(initialPhone);
 
+  React.useEffect(() => {
+    if (initialPhone) setPhone(initialPhone);
+  }, [initialPhone]);
+
   const getCarrier = (p: string) => {
     if (p.includes("300") || p.includes("301") || p.includes("302")) return "Jazz / Mobilink (Pakistan)";
     if (p.includes("312") || p.includes("313") || p.includes("314")) return "Zong 4G (Pakistan)";
