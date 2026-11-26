@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   chrome.storage.local.get(["scannedCount", "threatsBlocked", "protectionEnabled", "recentThreats"], (data) => {
     metricScanned.innerText = data.scannedCount || 0;
     metricThreats.innerText = data.threatsBlocked || 0;
-    
+
     // Count reported items
     const threats = data.recentThreats || [];
     renderRecentThreats(threats);
@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function escapeHtml(text) {
     if (!text) return "";
-    return text.replace(/[&<>"']/g, function(m) {
+    return text.replace(/[&<>"']/g, function (m) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
     });
   }

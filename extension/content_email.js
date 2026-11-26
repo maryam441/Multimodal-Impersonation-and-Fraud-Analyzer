@@ -152,7 +152,7 @@
 
   function escapeHtml(text) {
     if (!text) return "";
-    return text.replace(/[&<>"']/g, function(m) {
+    return text.replace(/[&<>"']/g, function (m) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
     });
   }

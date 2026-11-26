@@ -87,7 +87,7 @@ export function AmbientShieldHub() {
   return (
     <section id="ambient-shield" className="py-12 border-t border-slate-800 bg-slate-950/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Header and Telemetry Row */}
         <div className="p-6 rounded-2xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl mb-8">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
@@ -132,31 +132,28 @@ export function AmbientShieldHub() {
             <div className="flex space-x-2">
               <button
                 onClick={() => setActiveTab("intercepts")}
-                className={`px-4 py-2 rounded-lg text-xs font-mono font-bold transition-all ${
-                  activeTab === "intercepts"
+                className={`px-4 py-2 rounded-lg text-xs font-mono font-bold transition-all ${activeTab === "intercepts"
                     ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40"
                     : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
-                }`}
+                  }`}
               >
                 Live Intercepts Feed ({intercepts.length})
               </button>
               <button
                 onClick={() => setActiveTab("incidents")}
-                className={`px-4 py-2 rounded-lg text-xs font-mono font-bold transition-all ${
-                  activeTab === "incidents"
+                className={`px-4 py-2 rounded-lg text-xs font-mono font-bold transition-all ${activeTab === "incidents"
                     ? "bg-rose-500/20 text-rose-300 border border-rose-500/40"
                     : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
-                }`}
+                  }`}
               >
                 FIA Incident Registry ({incidents.length})
               </button>
               <button
                 onClick={() => setActiveTab("guide")}
-                className={`px-4 py-2 rounded-lg text-xs font-mono font-bold transition-all ${
-                  activeTab === "guide"
+                className={`px-4 py-2 rounded-lg text-xs font-mono font-bold transition-all ${activeTab === "guide"
                     ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
                     : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
-                }`}
+                  }`}
               >
                 Browser Extension Setup
               </button>
@@ -185,11 +182,10 @@ export function AmbientShieldHub() {
                 {intercepts.map((item) => (
                   <div
                     key={item.id}
-                    className={`p-4 rounded-xl border transition-all ${
-                      item.is_threat
+                    className={`p-4 rounded-xl border transition-all ${item.is_threat
                         ? "bg-rose-950/20 border-rose-900/50 hover:border-rose-700/60"
                         : "bg-slate-900/40 border-slate-800 hover:border-slate-700"
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center justify-between mb-2">
                       <span className="flex items-center space-x-1.5 text-[10px] font-mono px-2 py-0.5 rounded bg-slate-950/60 border border-slate-800 text-slate-300 uppercase">
@@ -201,13 +197,12 @@ export function AmbientShieldHub() {
                       </span>
 
                       <span
-                        className={`text-xs font-mono font-bold px-2 py-0.5 rounded ${
-                          item.risk_score >= 60
+                        className={`text-xs font-mono font-bold px-2 py-0.5 rounded ${item.risk_score >= 60
                             ? "bg-rose-500/20 text-rose-300 border border-rose-500/40"
                             : item.risk_score >= 31
-                            ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
-                            : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
-                        }`}
+                              ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
+                              : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                          }`}
                       >
                         {item.risk_score.toFixed(1)} / 100
                       </span>

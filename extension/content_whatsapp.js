@@ -21,8 +21,8 @@
   // Get active sender or chat title
   function getActiveChatTitle() {
     const titleEl = document.querySelector('header span[data-testid="conversation-info-header-chat-title"]') ||
-                    document.querySelector('header [title]') ||
-                    document.querySelector('header ._amig');
+      document.querySelector('header [title]') ||
+      document.querySelector('header ._amig');
     return titleEl ? (titleEl.getAttribute('title') || titleEl.innerText) : "Unknown WhatsApp Contact";
   }
 
@@ -31,15 +31,15 @@
     if (!msgEl || msgEl.hasAttribute('data-sentinel-scanned')) return;
 
     // Check if incoming message (typically contains 'message-in')
-    const isIncoming = msgEl.classList.contains('message-in') || 
-                       msgEl.closest('.message-in') || 
-                       !msgEl.classList.contains('message-out');
+    const isIncoming = msgEl.classList.contains('message-in') ||
+      msgEl.closest('.message-in') ||
+      !msgEl.classList.contains('message-out');
 
     if (!isIncoming) return;
 
-    const textEl = msgEl.querySelector('.selectable-text') || 
-                   msgEl.querySelector('span.selectable-text') || 
-                   msgEl.querySelector('div.copyable-text');
+    const textEl = msgEl.querySelector('.selectable-text') ||
+      msgEl.querySelector('span.selectable-text') ||
+      msgEl.querySelector('div.copyable-text');
 
     if (!textEl) return;
 
@@ -190,7 +190,7 @@
 
   function escapeHtml(text) {
     if (!text) return "";
-    return text.replace(/[&<>"']/g, function(m) {
+    return text.replace(/[&<>"']/g, function (m) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
     });
   }
