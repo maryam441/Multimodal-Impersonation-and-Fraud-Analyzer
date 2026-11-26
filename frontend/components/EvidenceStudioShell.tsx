@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { Mic, MessageSquare, MessagesSquare, Link2, PhoneCall, Sparkles, Play, Loader2 } from "lucide-react";
+import { Mic, MessageSquare, MessagesSquare, Link2, PhoneCall, Mail, Sparkles, Play, Loader2 } from "lucide-react";
 import { VoiceCard } from "./studio/VoiceCard";
 import { MessageCard } from "./studio/MessageCard";
 import { ConversationCard } from "./studio/ConversationCard";
 import { URLCard } from "./studio/URLCard";
 import { PhoneCard } from "./studio/PhoneCard";
+import { EmailCard } from "./studio/EmailCard";
 import { ForensicDossierView } from "./dossier/ForensicDossierView";
 import {
   createCase,
@@ -15,6 +16,7 @@ import {
   analyzeConversation,
   analyzeUrl,
   analyzePhone,
+  analyzeEmail,
   getForensicReport,
   ForensicReportResponse
 } from "@/lib/api";
@@ -26,6 +28,7 @@ export function EvidenceStudioShell() {
     conversation: false,
     url: true,
     phone: false,
+    email: true,
   });
 
   // User input states across modalities
@@ -34,6 +37,11 @@ export function EvidenceStudioShell() {
   );
   const [urlText, setUrlText] = useState("http://secure-hbl.phish.pk/verify");
   const [phoneText, setPhoneText] = useState("0300-1234567");
+  const [emailSender, setEmailSender] = useState("Habib Bank Security <security-alert@hbl-banking-notice.pk>");
+  const [emailSubject, setEmailSubject] = useState("URGENT: Temporary suspension of your HBL digital banking");
+  const [emailBody, setEmailBody] = useState(
+    "Dear Valued Customer,\n\nWe noticed unauthorized login attempts. Your account has been temporarily restricted.\n\nPlease verify your biometric credentials immediately at our secure portal:\nhttp://hbl-update-security.com/login\n\nFailure to verify within 4 hours will lead to permanent card blocking."
+  );
   const [conversationText, setConversationText] = useState(
     "[10:14] Officer: This is Sub-Inspector Farooq from FIA. Your account has an FIR.\n[10:15] Citizen: What FIR?\n[10:16] Officer: Settle Rs. 50,000 immediately via Easypaisa or face arrest."
   );
@@ -135,6 +143,11 @@ export function EvidenceStudioShell() {
         tasks.push(analyzePhone(caseId, phoneText).catch(err => console.warn("Phone error", err)));
       }
 
+      if (activeModalities.email) {
+        setAnalysisStage("Inspecting RFC 2822 header spoofing & brand alignment...");
+        tasks.push(analyzeEmail(caseId, emailSender, emailSubject, emailBody).catch(err => console.warn("Email error", err)));
+      }
+
       await Promise.all(tasks);
 
       setAnalysisStage("Evaluating transparent weighted late fusion...");
@@ -203,11 +216,12 @@ export function EvidenceStudioShell() {
       </div>
 
       {/* Modality Toggles Dock */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 my-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 my-6">
         {[
           { id: "voice", label: "Voice / Audio", icon: Mic },
           { id: "message", label: "Single Message", icon: MessageSquare },
           { id: "conversation", label: "Multi-Turn Chat", icon: MessagesSquare },
+          { id: "email", label: "Email Modality", icon: Mail },
           { id: "url", label: "Suspicious URL", icon: Link2 },
           { id: "phone", label: "Phone Number", icon: PhoneCall },
         ].map(item => {
@@ -290,6 +304,18 @@ export function EvidenceStudioShell() {
             onURLChange={setUrlText}
           />
         )}
+        {activeModalities.email && (
+          <EmailCard
+            sender={emailSender}
+            setSender={setEmailSender}
+            subject={emailSubject}
+            setSubject={setEmailSubject}
+            body={emailBody}
+            setBody={setEmailBody}
+            isActive={activeModalities.email}
+            onToggle={() => toggleModality("email")}
+          />
+        )}
         {activeModalities.phone && (
           <PhoneCard
             initialPhone={phoneText}
@@ -302,9 +328,9 @@ export function EvidenceStudioShell() {
       <div className="mt-6 p-3 rounded-xl bg-slate-950 border border-slate-800/80 flex items-center justify-between text-xs font-mono text-slate-500">
         <span>Missing Modality Policy:</span>
         <span>
-          {5 - activeCount > 0
-            ? `${5 - activeCount} unprovided modalities are treated as Neutral (Never imputed as zero risk)`
-            : "All 5 modalities active"}
+          {6 - activeCount > 0
+            ? `${6 - activeCount} unprovided modalities are treated as Neutral (Never imputed as zero risk)`
+            : "All 6 modalities active"}
         </span>
       </div>
 

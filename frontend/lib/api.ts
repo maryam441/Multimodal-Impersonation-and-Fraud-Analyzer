@@ -43,7 +43,7 @@ export interface EvidenceSignal {
 }
 
 export interface ModalityResultItem {
-  modality: "voice" | "message" | "conversation" | "url" | "phone";
+  modality: "voice" | "message" | "conversation" | "url" | "phone" | "email";
   status: "analyzed" | "inconclusive" | "failed" | "insufficient_data";
   risk_score: number | null;
   risk_label: "low" | "medium" | "high" | "inconclusive" | null;
@@ -175,6 +175,29 @@ export async function analyzeVoice(caseId: string, file?: File, preset = "sample
     body: formData,
   });
   if (!res.ok) throw new Error("Failed to analyze voice audio");
+  return res.json();
+}
+
+export async function analyzeEmail(
+  caseId: string,
+  sender: string,
+  subject: string,
+  body: string,
+  replyTo?: string,
+  headers?: Record<string, string>
+): Promise<ModalityResultItem> {
+  const res = await fetch(`${API_BASE}/cases/${caseId}/email`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      sender,
+      subject,
+      body,
+      reply_to: replyTo,
+      headers: headers || {},
+    }),
+  });
+  if (!res.ok) throw new Error("Failed to analyze email");
   return res.json();
 }
 
