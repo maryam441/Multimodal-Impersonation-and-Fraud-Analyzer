@@ -250,8 +250,10 @@ class VoiceAnalyzer(BaseModalityAnalyzer):
             created_at=datetime.now(timezone.utc)
         )
 
+from backend.app.services.voice_service import VoiceServiceAnalyzer
+
 phone_analyzer = PhoneAnalyzer()
 message_analyzer = MessageAnalyzer()
 url_analyzer = URLAnalyzer()
 conversation_analyzer = ConversationAnalyzer()
-voice_analyzer = VoiceAnalyzer()
+voice_analyzer = VoiceServiceAnalyzer()
