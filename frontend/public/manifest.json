@@ -1,0 +1,32 @@
+{
+  "name": "AegisAI - Multimodal Anti-Fraud & Impersonation Shield",
+  "short_name": "AegisAI Shield",
+  "description": "Real-Time Cyber-Forensic & Multimodal Fraud Detection Shield with FIA Cybercrime Reporting",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070a13",
+  "theme_color": "#070a13",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["security", "utilities", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

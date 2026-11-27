@@ -34,30 +34,30 @@
       top: 0;
       left: 0;
       width: 100%;
-      background: #881337;
-      border-bottom: 2px solid #f43f5e;
-      color: #fff;
+      background: #0d1326;
+      border-bottom: 2px solid #dc2626;
+      color: #f8fafc;
       padding: 10px 20px;
       z-index: 2147483647;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       font-size: 13px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 25px rgba(0,0,0,0.7);
     `;
 
     banner.innerHTML = `
-      <div style="display:flex; align-items:center; gap:10px;">
+      <div style="display:flex; align-items:center; gap:12px;">
         <span style="font-size:18px;">🛑</span>
         <span>
-          <strong>SENTINEL FRAUD ALERT:</strong> This webpage has been flagged as suspicious / deceptive (${data.risk_score}% Risk). 
-          Do not enter OTPs, passwords, or CNIC.
+          <strong style="color:#f87171; font-family:monospace;">SENTINEL FRAUD ALERT:</strong> This webpage has been flagged as suspicious / deceptive (${data.risk_score}% Risk). 
+          Do not enter OTPs, passwords, or personal banking credentials.
         </span>
       </div>
       <div style="display:flex; gap:10px;">
-        <button id="sentinel-dismiss-web" style="background:#475569; color:#fff; border:none; padding:4px 10px; border-radius:4px; cursor:pointer;">Dismiss</button>
-        <button id="sentinel-report-web-fia" style="background:#e11d48; color:#fff; border:1px solid #fda4af; padding:4px 12px; border-radius:4px; font-weight:bold; cursor:pointer;">Report Domain to FIA</button>
+        <button id="sentinel-dismiss-web" style="background:#1e294b; color:#cbd5e1; border:1px solid #334155; padding:5px 12px; border-radius:5px; cursor:pointer; font-size:11px;">Dismiss</button>
+        <button id="sentinel-report-web-fia" style="background:#dc2626; color:#ffffff; border:1px solid #ef4444; padding:5px 14px; border-radius:5px; font-weight:bold; cursor:pointer; font-size:11px; font-family:monospace;">Report Domain to FIA</button>
       </div>
     `;
 

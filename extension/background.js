@@ -1,11 +1,11 @@
 /**
  * Sentinel Ambient Shield - Service Worker / Background Script
- * Orchestrates real-time API communication, badge counts, and notifications.
+ * Orchestrates real-time API communication, badge counts, context menus, and notifications.
  */
 
 const DEFAULT_API_BASE = "http://127.0.0.1:8000/api/v1";
 
-// Initialize local storage counters
+// Initialize local storage counters & Context Menu on install
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.local.get(["protectionEnabled", "scannedCount", "threatsBlocked"], (data) => {
     if (data.protectionEnabled === undefined) {
@@ -18,17 +18,68 @@ chrome.runtime.onInstalled.addListener(() => {
       });
     }
   });
-  console.log("Sentinel Ambient Shield service worker installed.");
+
+  // Register Right-Click Context Menu for scanning selection or link
+  chrome.contextMenus.create({
+    id: "sentinel_scan_selection",
+    title: "🛡️ Scan selection with AegisAI Anti-Fraud",
+    contexts: ["selection", "link"]
+  });
+
+  console.log("Sentinel Ambient Shield service worker and context menu installed.");
+});
+
+// Handle Context Menu click
+chrome.contextMenus.onClicked.addListener(async (info, tab) => {
+  if (info.menuItemId === "sentinel_scan_selection") {
+    const targetText = info.selectionText || info.linkUrl;
+    if (!targetText) return;
+
+    try {
+      const result = await handleAmbientScan({
+        content: targetText,
+        source: "context_menu",
+        url: info.linkUrl || null
+      });
+
+      if (result && result.is_threat) {
+        chrome.notifications.create({
+          type: "basic",
+          iconUrl: "icons/icon128.png",
+          title: "🚨 AegisAI Fraud Warning",
+          message: `High Threat Detected (Risk: ${result.risk_score}%). Flagged: ${(result.threat_tags || []).join(", ") || "Suspicious content"}`,
+          priority: 2
+        });
+      } else {
+        chrome.notifications.create({
+          type: "basic",
+          iconUrl: "icons/icon128.png",
+          title: "✅ AegisAI Safety Check",
+          message: "No obvious fraud or impersonation indicators found in the selected content.",
+          priority: 1
+        });
+      }
+    } catch (err) {
+      console.error("Context menu scan error:", err);
+      chrome.notifications.create({
+        type: "basic",
+        iconUrl: "icons/icon128.png",
+        title: "⚠️ AegisAI Scan Warning",
+        message: "Failed to connect to backend at http://127.0.0.1:8000. Ensure Sentinel Core is running.",
+        priority: 1
+      });
+    }
+  }
 });
 
 // Update extension icon badge
 function updateBadge(threatsCount) {
   if (threatsCount > 0) {
     chrome.action.setBadgeText({ text: `${threatsCount}` });
-    chrome.action.setBadgeBackgroundColor({ color: "#f43f5e" }); // Rose red
+    chrome.action.setBadgeBackgroundColor({ color: "#dc2626" }); // Crimson red
   } else {
     chrome.action.setBadgeText({ text: "ON" });
-    chrome.action.setBadgeBackgroundColor({ color: "#10b981" }); // Emerald
+    chrome.action.setBadgeBackgroundColor({ color: "#2563eb" }); // Cobalt blue
   }
 }
 
@@ -99,67 +150,56 @@ async function handleAmbientScan(payload) {
       source: result.source,
       sender: result.sender,
       risk_score: result.risk_score,
-      threat_tags: result.threat_tags,
-      summary: result.summary,
-      target_phone: result.target_phone,
-      target_url: result.target_url
+      threat_tags: result.threat_tags
     });
+    // Keep max 20 threats
     if (recentThreats.length > 20) recentThreats.pop();
 
-    updateBadge(1);
+    updateBadge(newThreats);
 
-    // Native browser toast notification
-    chrome.notifications.create({
-      type: "basic",
-      iconUrl: "icons/icon128.png",
-      title: "🛡️ Sentinel Security Alert",
-      message: `Impersonation / Fraud threat detected on ${result.source.toUpperCase()} (Risk: ${result.risk_score}/100)`,
-      priority: 2
-    });
+    // Trigger Chrome desktop notification for severe threat
+    if (result.risk_score >= 60) {
+      chrome.notifications.create({
+        type: "basic",
+        iconUrl: "icons/icon128.png",
+        title: "🚨 SENTINEL FRAUD ALERT",
+        message: `High risk scam flagged (${result.risk_score}%). Threat: ${(result.threat_tags || []).join(", ")}`,
+        priority: 2
+      });
+    }
   }
 
   await chrome.storage.local.set({
     scannedCount: newScanned,
     threatsBlocked: newThreats,
-    recentThreats
+    recentThreats: recentThreats
   });
 
   return result;
 }
 
 async function handleFIAReport(payload) {
-  const { case_id, operator_notes, source, accused_identifier } = payload;
+  const { case_id, source, accused_identifier, operator_notes } = payload;
   const store = await chrome.storage.local.get(["apiBase"]);
   const apiBase = store.apiBase || DEFAULT_API_BASE;
-  const endpoint = `${apiBase}/incidents/direct-report`;
+  const endpoint = `${apiBase}/fia/report`;
 
   const res = await fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      case_id,
+      case_id: case_id,
       user_confirmed: true,
-      operator_notes: operator_notes || "Complainant verified ambient alert via Sentinel Shield extension.",
-      source: source || "whatsapp",
+      operator_notes: operator_notes || "Reported via Sentinel Chrome Extension",
+      source: source || "chrome_extension",
       accused_identifier: accused_identifier || null
     })
   });
 
   if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`FIA Report dispatch failed (${res.status}): ${err}`);
+    const errText = await res.text();
+    throw new Error(`FIA report dispatch failed (${res.status}): ${errText}`);
   }
 
-  const report = await res.json();
-
-  // Notification for formal registration
-  chrome.notifications.create({
-    type: "basic",
-    iconUrl: "icons/icon128.png",
-    title: "🚨 FIA Cybercrime Complaint Registered",
-    message: `Reference No: ${report.reference_no} sealed under PECA 2016.`,
-    priority: 2
-  });
-
-  return report;
+  return await res.json();
 }

@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Sentinel Ambient Shield - Fraud & Impersonation Guardian",
-  "version": "3.0.0",
-  "description": "Real-time AI shield monitoring WhatsApp Web, Gmail, and Web URLs for fraud, bank impersonation, and OTP theft with 1-click FIA Cybercrime reporting.",
+  "version": "3.1.0",
+  "description": "Enterprise AI shield monitoring WhatsApp Web, Gmail, and Web URLs for fraud, bank impersonation, and OTP theft with 1-click FIA Cybercrime reporting.",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -15,12 +15,13 @@
       "48": "icons/icon48.png",
       "128": "icons/icon128.png"
     },
-    "default_title": "Sentinel Ambient Shield"
+    "default_title": "Sentinel Ambient Shield - Anti-Fraud Guardian"
   },
   "permissions": [
     "storage",
     "notifications",
-    "activeTab"
+    "activeTab",
+    "contextMenus"
   ],
   "host_permissions": [
     "http://127.0.0.1:8000/*",

@@ -175,16 +175,16 @@ export function EvidenceStudioShell() {
   return (
     <section id="evidence-studio" className="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Studio Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-forensic-border gap-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-[#1e294b] gap-4">
         <div>
           <div className="flex items-center space-x-2">
             <h2 className="text-xl font-bold font-mono text-white">Unified Evidence Studio</h2>
-            <span className="text-xs px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-mono border border-cyan-500/30">
-              Active: {activeCount}/5 Modalities
+            <span className="text-xs px-2 py-0.5 rounded bg-blue-600/15 text-blue-300 font-mono border border-blue-500/30">
+              Active: {activeCount}/6 Modalities
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-1">
-            Type or paste your suspicious message, link, phone number, or chat below. You can also select pre-configured benchmarks.
+            Type or paste your suspicious message, link, phone number, email, or chat below. You can also select pre-configured benchmarks.
           </p>
         </div>
 
@@ -194,21 +194,21 @@ export function EvidenceStudioShell() {
           <button
             type="button"
             onClick={() => loadPreset("bank")}
-            className="px-2.5 py-1 text-xs rounded font-mono bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors"
+            className="px-2.5 py-1 text-xs rounded font-mono bg-[#0d1326] hover:bg-[#1e294b] text-slate-300 border border-[#1e294b] transition-colors"
           >
             Bank Scam
           </button>
           <button
             type="button"
             onClick={() => loadPreset("family")}
-            className="px-2.5 py-1 text-xs rounded font-mono bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors"
+            className="px-2.5 py-1 text-xs rounded font-mono bg-[#0d1326] hover:bg-[#1e294b] text-slate-300 border border-[#1e294b] transition-colors"
           >
             Emergency Call
           </button>
           <button
             type="button"
             onClick={() => loadPreset("benign")}
-            className="px-2.5 py-1 text-xs rounded font-mono bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors"
+            className="px-2.5 py-1 text-xs rounded font-mono bg-[#0d1326] hover:bg-[#1e294b] text-slate-300 border border-[#1e294b] transition-colors"
           >
             Clean Portal
           </button>
@@ -234,15 +234,15 @@ export function EvidenceStudioShell() {
               onClick={() => toggleModality(item.id)}
               className={`p-3 rounded-xl border text-left flex items-center justify-between transition-all ${
                 active
-                  ? "bg-slate-900 border-cyan-500/60 shadow-md shadow-cyan-950/40 text-white"
-                  : "bg-slate-950/60 border-slate-800 text-slate-500 hover:border-slate-700"
+                  ? "bg-[#0d1326] border-blue-500/60 shadow-md shadow-blue-950/40 text-white"
+                  : "bg-[#070a13] border-[#1e294b] text-slate-400 hover:border-slate-700"
               }`}
             >
               <div className="flex items-center space-x-2.5">
-                <Icon className={`w-4 h-4 ${active ? "text-cyan-400" : "text-slate-600"}`} />
+                <Icon className={`w-4 h-4 ${active ? "text-blue-400" : "text-slate-600"}`} />
                 <span className="text-xs font-mono font-semibold">{item.label}</span>
               </div>
-              <span className={`w-2 h-2 rounded-full ${active ? "bg-cyan-400" : "bg-slate-700"}`} />
+              <span className={`w-2 h-2 rounded-full ${active ? "bg-blue-400" : "bg-slate-700"}`} />
             </button>
           );
         })}
@@ -250,10 +250,10 @@ export function EvidenceStudioShell() {
 
       {/* Smart Cross-Modality Extraction Chip Banner */}
       {(extractedURL || extractedPhone) && (
-        <div className="mb-6 p-4 rounded-xl bg-cyan-950/20 border border-cyan-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="mb-6 p-4 rounded-xl bg-blue-950/25 border border-blue-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center space-x-2">
-            <Sparkles className="w-4 h-4 text-cyan-400 flex-shrink-0 animate-pulse" />
-            <span className="text-xs text-cyan-200 font-mono">
+            <Sparkles className="w-4 h-4 text-blue-400 flex-shrink-0 animate-pulse" />
+            <span className="text-xs text-blue-200 font-mono">
               Smart Extraction Discovered Embedded Entities in Message Text:
             </span>
           </div>
@@ -262,7 +262,7 @@ export function EvidenceStudioShell() {
               <button
                 type="button"
                 onClick={() => applyExtractedEntity("url")}
-                className="inline-flex items-center space-x-1.5 text-xs font-mono px-3 py-1 rounded bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 transition-colors"
+                className="inline-flex items-center space-x-1.5 text-xs font-mono px-3 py-1 rounded bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 border border-blue-500/40 transition-colors"
               >
                 <span>⚡ Populate URL:</span>
                 <span className="underline max-w-[150px] truncate">{extractedURL}</span>
@@ -272,7 +272,7 @@ export function EvidenceStudioShell() {
               <button
                 type="button"
                 onClick={() => applyExtractedEntity("phone")}
-                className="inline-flex items-center space-x-1.5 text-xs font-mono px-3 py-1 rounded bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 transition-colors"
+                className="inline-flex items-center space-x-1.5 text-xs font-mono px-3 py-1 rounded bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 border border-indigo-500/40 transition-colors"
               >
                 <span>⚡ Populate Phone:</span>
                 <span>{extractedPhone}</span>
@@ -359,7 +359,7 @@ export function EvidenceStudioShell() {
           type="button"
           disabled={!consentGiven || activeCount === 0 || isAnalyzing}
           onClick={handleExecuteAnalysis}
-          className="inline-flex items-center justify-center space-x-2 px-6 py-2.5 rounded-lg bg-gradient-to-r from-cyan-500 to-teal-500 text-slate-950 font-bold font-mono text-xs hover:from-cyan-400 hover:to-teal-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md active:scale-95 shrink-0"
+          className="inline-flex items-center justify-center space-x-2 px-6 py-2.5 rounded-lg bg-blue-600 text-white font-bold font-mono text-xs hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md shadow-blue-600/25 active:scale-95 shrink-0"
         >
           {isAnalyzing ? (
             <>
